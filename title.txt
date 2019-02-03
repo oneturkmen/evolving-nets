@@ -1,0 +1,16 @@
+
+- Evolutionary Neural Networks (Plastic, non-plastic). + Differential plasticity for transfer learning? 
+
+
+- Traveling Salesman (title?)
+
+Acknoledgements
+I. Introduction + Preliminaries (Attacking NP-hard/complete TSP from different "angles", which will be traditional methods, heuristics, and novel metaheuristics)
+II. Problem-oriented approach (problem description, what's been done so far, applications, etc.)
+III. Traditional Methods (dynamic programming, nearest neighbor)
+V. Other heuristics (2-opt, Lin Kernighan (is it k-opt?))
+IV. Evolutionary approach (evolutionary algorithm along with the description of crossover types as well as function representations)
+V. Real-life application (? if necessary; do some dynamic shit)
+VI. Conclusion
+
+In each section, provide pseudocode (or the actual code), time that it took to run, and statistics (graphs for convergence, ETA)
