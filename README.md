@@ -10,6 +10,14 @@ Here, I will use Neuroevolution of Augmenting Topologies (NEAT), which optimizes
 
 WIP
 
+## What shall be done
+
+- [x] Implement fixed-topology network and its evolution (e.g. for balancing a cart pole from OpenAI gym)
+- [ ] Implement NEAT (with some OpenAI environment)
+- [ ] Incorporate novelty search for NEAT
+- [ ] Check plasticity and whether it makes sense to incorporate it as well (i.e. for evolution)
+- [ ] Co-evolutionatiry methods? Research needed.
+
 ## Contents
 
 In this repo, you will find the implementation of NEAT [1] and potentially its variations; an implementation of neuroevolution of a fixed topology (artificial) neural network is also present.
