@@ -1,27 +1,52 @@
 """
 * Author : Batyr Nuryyev
-* Date   : Feb 3, 2019
+* Date   : Feb 22, 2019
 """
 
 import numpy as np
 from itertools import count
 
 class Connection:
-    # Innovation number counter
-    _ids = count(0)
+    """
+    Class that keeps the edges of neural network here along with 
+    weights, and input and output nodes. The connection can either
+    be enabled or disabled (for each run), and each weight can be
+    either mutated or not.
+    """
 
-    def __init__(self, in_node, out_node, weight, isEnabled = True):
+    # Innovation number counter
+    _ids = count(1)
+
+    def __init__(self, in_node, out_node, isEnabled = True):
         self.id = next(self._ids)
         self.in_node = in_node
         self.out_node = out_node
-        self.weight = weight # TODO: change to numpy normal distrib
+        self.weight = np.random.uniform(low = -2.0, high = 2.0)
         self.isEnabled = True
 
-    def mutateWeight(self):
-        # TODO
-        return 
+    def get_innov(self):
+        """
+            Returns unique innovation number
+        """
+        return self.id
+
+    def get_weight(self):
+        return self.weight
 
     
-    def mutateEnabled(self):
+    def get_in_node(self):
+        return self.in_node
+    
+
+    def get_out_node(self):
+        return self.out_node
+
+
+    def mutate_weight(self):
+        # TODO
+        return
+
+    
+    def mutate_enabled(self):
         # TODO
         return 
