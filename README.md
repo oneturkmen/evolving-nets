@@ -14,6 +14,7 @@ WIP
 
 - [x] Implement fixed-topology network and its evolution (e.g. for balancing a cart pole from OpenAI gym)
 - [ ] Implement NEAT (with some OpenAI environment)
+- [ ] Genotype to phenotype visualization (using Keras without evaluation)
 - [ ] Incorporate novelty search for NEAT
 - [ ] Check plasticity and whether it makes sense to incorporate it as well (i.e. for evolution)
 - [ ] Co-evolutionatiry methods? Research needed.
