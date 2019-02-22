@@ -1,4 +1,4 @@
-## Evolving Neural Networks
+## Evolving Neural Networks (WIP)
 
 Well, above is the title of my project.
 
@@ -9,6 +9,14 @@ Y'all know there is a traditional way to optimize neural network's weights - thr
 Here, I will use Neuroevolution of Augmenting Topologies (NEAT), which optimizes neural network's weights as well as its topology (a.k.a. architecture). I intend to implement it from scratch and test it with some OpenAI gym environment like balancing a cart pole or possibly MuJoCo (where "human" learns how to walk or stand up).
 
 WIP
+
+## What shall be done
+
+- [x] Implement fixed-topology network and its evolution (e.g. for balancing a cart pole from OpenAI gym)
+- [ ] Implement NEAT (with some OpenAI environment)
+- [ ] Incorporate novelty search for NEAT
+- [ ] Check plasticity and whether it makes sense to incorporate it as well (i.e. for evolution)
+- [ ] Co-evolutionatiry methods? Research needed.
 
 ## Contents
 
