@@ -17,7 +17,7 @@ class Genome:
         this class also provides methods for mutation
         of each of those.
         Pretty much the same as neural network, but
-        quite dynamic (i.e. can change weights and topology)
+        quite dynamic (i.e. can change weights and topology).
     """
 
     def __init__(self):
@@ -61,13 +61,13 @@ class Genome:
 
     def reset_score():
         """
-            Resets the score
+            Resets the score.
         """
         self.score = 0
 
     def get_score():
         """
-            Returns evaluated fitness score
+            Returns evaluated fitness score.
         """
         return self.score    
 
