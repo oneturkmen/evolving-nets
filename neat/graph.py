@@ -11,6 +11,33 @@ class Graph:
         implements forward propagation of data and keeps 
         the evaluated fitness score.
     """
+
+    #TODO: Add references to NEAT-python for graph helper functions
+
+    def creates_cycle(self, connections, new_connection):
+        """
+            Checks if a new connection introduces a cycle
+            into the graph (graph without cycles is assumed)
+        """
+        i, o = new_connection
+        if i == o:
+            return True
+        
+        visited = {o}
+        while True:
+            num_added = 0
+            for a, b in connections:
+                if a in visited and b not in visited:
+                    print(a,b)
+                    if b == i:
+                        return True
+                    
+                    visited.add(b)
+                    num_added += 1
+            
+            if num_added == 0:
+                return False
+
     
     def required_for_output(self, inputs, outputs, connections):
         """
@@ -161,5 +188,5 @@ graph = Graph()
 # calculi2 = data[0] * connections[3].get_weight() + 1 + data[1] * connections[2].get_weight() + 1
 # print(calculi1)
 #print(calculi2)
-
-print(graph.forward_propagate(data, inputs, outputs, connections))
+#print(graph.forward_propagate(data, inputs, outputs, connections))
+#print(graph.creates_cycle([(2,4),(1,5),(4,6),(6,3),(5,6)],(3,4)))
