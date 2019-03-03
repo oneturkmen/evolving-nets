@@ -7,6 +7,7 @@ from node import Node
 from connectionGene import Connection
 from itertools import product
 from operator import itemgetter
+from graph import Graph
 import numpy as np
 
 class Genome:
@@ -20,7 +21,8 @@ class Genome:
     """
 
     def __init__(self):
-        self.node_genes = []
+        self.input_nodes = []
+        self.output_nodes = []
         self.connection_genes = []
         self.score = 0
 
@@ -28,6 +30,10 @@ class Genome:
 
     def __addNode(self):
         # TODO
+        # MAKE SURE NOT TO ALLOW STALE NEURON IN
+        # i.e. one with a single incoming/outgoing connection
+        # so each neuron should have at least 2 incoming/outgoing
+        # connections
         return
 
     def __addConnection(self):
@@ -36,19 +42,21 @@ class Genome:
 
     ############ - Public methods - ############
 
+    def get_inputs(self):
+        return self.input_nodes
+    
+
+    def get_outputs(self):
+        return self.output_nodes
+
+    def get_connections(self):
+        return self.connection_genes
+
     def forward_propagate(self):
-        # Align (sort) connections
-        connections = [(1,5),(2,5),(3,4),(1,4),(5,4)]
+        # TODO
 
-        sorted_connections = sorted(
-            connections, key = lambda c : (c[0])
-        )
-
-        # Propagate the weights
-        # Get the output
         # Return!
-        return sorted_connections
-
+        return
 
 
     def reset_score():
@@ -73,15 +81,18 @@ class Genome:
         assert num_inputs >= num_outputs, "Dimensions of inputs and outputs are incorrect"
 
         # Append inputs and outputs
-        self.node_genes = [Node(0) for i in range(num_inputs)]
-        self.node_genes = self.node_genes + [Node(2) for i in range(num_outputs)]
+        # TODO: we should probably fix the num_inputs and num_outputs?
+        # TODO: THINK ARCHITECTURE TOMORROW !!! Blackboard
+        # Maybe go to BAC 326 or Seminar room is ok as well
+        self.input_nodes  = [i+1 for i in range(num_inputs)]
+        self.output_nodes = [i+1 for i in range(num_inputs, num_outputs + num_inputs)]
 
         # Initialize connections
-        sensor_nodes = list(filter(lambda n : n.category == 0, self.node_genes))
-        output_nodes = list(filter(lambda n : n.category == 2, self.node_genes))
+        # TODO: Use Node ids instead of enumeration
         connections = [
-            Connection(sensor, output) 
-            for sensor in range(1,len(sensor_nodes)+1) for output in range(1,len(output_nodes)+1)
+            Connection(sensor, output)
+            for sensor in self.input_nodes
+                for output in self.output_nodes
         ]
         self.connection_genes = connections
 
@@ -93,9 +104,9 @@ class Genome:
         # Mutate add connection
         # Mutate add node
         #
-        # In adding a new node, the
-        # connection gene being split is disabled, and two new connection genes are added to the
-        # end of the genome. The new node is between the two new connections. A new node gene
+        # In adding a new node, the connection gene being split is disabled, 
+        # and two new connection genes are added to the end of the genome. 
+        # The new node is between the two new connections. A new node gene
         # representing this new node is added to the genome as well.
         #
         return
@@ -104,5 +115,10 @@ class Genome:
 # For testing purposes
 genome = Genome()
 #xs = [(connection.get_in_node(), connection.get_out_node()) for connection in genome.initialize(3, 1)]
-#print(xs)
-print(genome.forward_propagate())
+
+inputs = [1,2]
+outputs = [6]
+connections = [(1,5),(2,5),(4,6),(3,6),(5,4),(5,3)]
+
+graph = Graph()
+print(graph.set_up_layers(genome.get_inputs(), genome.get_outputs(), genome.get_connections()))

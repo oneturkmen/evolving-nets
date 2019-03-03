@@ -24,6 +24,9 @@ class Connection:
         self.weight = np.random.uniform(low = -2.0, high = 2.0)
         self.isEnabled = True
 
+    def is_enabled(self):
+        return self.isEnabled
+
     def get_innov(self):
         """
             Returns unique innovation number
