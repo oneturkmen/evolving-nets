@@ -8,6 +8,7 @@ from connectionGene import Connection
 from itertools import product
 from operator import itemgetter
 from graph import Graph
+from visual import visualize
 import numpy as np
 
 class Genome:
@@ -38,6 +39,7 @@ class Genome:
 
     def __addConnection(self):
         # TODO
+        # Make sure cycle is not created either
         return
 
     ############ - Public methods - ############
@@ -53,11 +55,10 @@ class Genome:
         return self.connection_genes
 
     def forward_propagate(self):
-        # TODO
+        # TODO: Integrate with graph.py here
 
         # Return!
         return
-
 
     def reset_score():
         """
@@ -81,14 +82,10 @@ class Genome:
         assert num_inputs >= num_outputs, "Dimensions of inputs and outputs are incorrect"
 
         # Append inputs and outputs
-        # TODO: we should probably fix the num_inputs and num_outputs?
-        # TODO: THINK ARCHITECTURE TOMORROW !!! Blackboard
-        # Maybe go to BAC 326 or Seminar room is ok as well
         self.input_nodes  = [i+1 for i in range(num_inputs)]
         self.output_nodes = [i+1 for i in range(num_inputs, num_outputs + num_inputs)]
 
         # Initialize connections
-        # TODO: Use Node ids instead of enumeration
         connections = [
             Connection(sensor, output)
             for sensor in self.input_nodes
@@ -96,8 +93,7 @@ class Genome:
         ]
         self.connection_genes = connections
 
-        return connections # TODO: remove after testing
-
+        return connections
 
     def mutate(self):
         # TODO
@@ -110,15 +106,26 @@ class Genome:
         # representing this new node is added to the genome as well.
         #
         return
+
+    def phenotype(self):
+        return visualize(self.input_nodes, self.output_nodes, self.connection_genes)
     
 
-# For testing purposes
-genome = Genome()
-#xs = [(connection.get_in_node(), connection.get_out_node()) for connection in genome.initialize(3, 1)]
 
-inputs = [1,2]
-outputs = [6]
-connections = [(1,5),(2,5),(4,6),(3,6),(5,4),(5,3)]
+# -------------------------- TESTING ----------------------------
+# TODO: Delegate to unit testing framework
+testing = False
+if testing:
+    # For testing purposes
+    genome = Genome()
+    xs = [
+        (connection.get_in_node(), connection.get_out_node()) 
+        for connection in genome.initialize(3, 1)
+    ]
 
-graph = Graph()
-print(graph.set_up_layers(genome.get_inputs(), genome.get_outputs(), genome.get_connections()))
+    inputs = [1,2]
+    outputs = [6]
+    connections = [(1,5),(2,5),(4,6),(3,6),(5,4),(5,3)]
+
+    graph = Graph()
+    print(graph.set_up_layers(genome.get_inputs(), genome.get_outputs(), genome.get_connections()))

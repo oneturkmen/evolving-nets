@@ -3,17 +3,14 @@
 * Date   : Feb 22, 2019
 """
 
-from connectionGene import Connection
-from activations import sigmoid, relu 
+from activations import sigmoid, relu
 
 class Graph:
     """
         This class dynamically constructs a directed graph, 
         implements forward propagation of data and keeps 
         the evaluated fitness score.
-    """
-
-    #TODO: Add references to NEAT-python for graph helper functions
+    """    
 
     def creates_cycle(self, connections, new_connection):
         """
@@ -169,17 +166,14 @@ class Graph:
                    layer_activations.append((node, relu(node_activation)))
 
         # Return last layer's (output layer) activations
-        return layer_activations[-1]
-        
-    def show_thyself():
-        # TODO : Keras network architecture visualization implementation
-        return
+        return layer_activations[-1]    
 
 
 # --------------------- TESTING ---------------------
 # TODO: Move to testing environment (unittest package)
-testing = True
+testing = False
 if testing:
+    from connectionGene import Connection
     # TESTING
     # TODO: remove when testing is done
     inputs = [1,2]
