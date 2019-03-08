@@ -4,6 +4,7 @@
 """
 
 from connectionGene import Connection
+from activations import sigmoid, relu 
 
 class Graph:
     """
@@ -128,41 +129,36 @@ class Graph:
         assert len(data) == len(inputs), "Data and input layer have different dimensions"
 
         # Contains initially 0th (input) layer
-        layer_activations = [set(zip(inputs, data))]
+        layer_activations = list(zip(inputs, data))
 
-        # Get a list of sets of nodes (set of nodes at 
-        # position i represents single layer i)
+        # Get a list of layers (each layer as a set of nodes)
         layers = self.set_up_layers(inputs, outputs, connections)
-
+        
+        # If direct network, then return
         if not layers:
+            print("WARNING: No layers in the network!")
             return layer_activations[0]
 
         for i, layer in enumerate(layers, start = 1):
-            
-            # Current layer activation
-            curr_layer_activation = set()
-            
-            # For each node in a current layer
-            for node in layer:
 
-                # Get the node's activation in total
+            # For each node in the current layer
+            for node in layer:         
+                # Add the sum
                 node_activation = sum([
                     prev_a * c.get_weight() + 1
-                    for (prev_node, prev_a) in layer_activations[i-1]
+                    for (prev_node, prev_a) in layer_activations
                     for c in connections
                     if prev_node == c.get_in_node()
                         and node == c.get_out_node()
                         and c.is_enabled()
                 ])
 
-                # Add to the list of activations of the current layer
-                curr_layer_activation.add(                    
-                    (node, node_activation)
-                )
-            
-            # Keep each layer's activations together
-            layer_activations.append(curr_layer_activation)
-        
+                # Run through activation function and add to the list of activations
+                if i == len(layers):
+                   layer_activations.append((node, sigmoid(node_activation)))
+                else:
+                   layer_activations.append((node, relu(node_activation)))
+
         # Return last layer's (output layer) activations
         return layer_activations[-1]
         
@@ -172,21 +168,78 @@ class Graph:
         return
 
 
-# TESTING
-# TODO: remove when testing is done
-inputs = [1,2]
-outputs = [3,4]
-connections = [Connection(1,3), Connection(2,3), Connection(2,4), Connection(1,4)]
-data = [10, -10]
-print([c.get_weight() for c in connections])
-graph = Graph()
-#testing = graph.forward_propagate(data, inputs, outputs, [], connections)
-#print(testing)
+# --------------------- TESTING ---------------------
+testing = True
+if testing:
+    # TESTING
+    # TODO: remove when testing is done
+    inputs = [1,2]
+    outputs = [3]
+    connections = [Connection(1,5), Connection(2,5), Connection(5,3), Connection(2,3)]
+    connections[0].weight = 2
+    connections[1].weight = 3
+    connections[2].weight = 4
+    connections[3].weight = 5
+    data = [10, -10]
+    print([c.get_weight() for c in connections])
+    graph = Graph()
 
-# print("Actual calculations ... ")
-# calculi1 = data[0] * connections[0].get_weight() + 1 + data[1] * connections[1].get_weight() + 1
-# calculi2 = data[0] * connections[3].get_weight() + 1 + data[1] * connections[2].get_weight() + 1
-# print(calculi1)
-#print(calculi2)
-#print(graph.forward_propagate(data, inputs, outputs, connections))
-#print(graph.creates_cycle([(2,4),(1,5),(4,6),(6,3),(5,6)],(3,4)))
+    # TODO: test forward prop with inputs=[1,2],outputs=[3],connections[(1,4),(2,4),(2,5),(5,3),(4,5)]
+    # print("Actual calculations ... ")
+    # calculi1 = data[0] * connections[0].get_weight() + 1 + data[1] * connections[1].get_weight() + 1
+    # calculi2 = data[0] * connections[3].get_weight() + 1 + data[1] * connections[2].get_weight() + 1
+    # print(calculi1)
+    #print(calculi2)
+    print(graph.forward_propagate(data, inputs, outputs, connections))
+    #print(graph.creates_cycle([(2,4),(1,5),(4,6),(6,3),(5,6)],(3,4)))
+
+    print("------------------- TEST 2 ------------------------")
+    data = [2, 2, 2]
+    inputs = [1, 2, 3]
+    outputs = [7]
+    connections = [Connection(1,5), Connection(2,5), Connection(2,4), Connection(3,4),
+                Connection(4,5), Connection(4,6), Connection(5,6), Connection(6,7)]
+
+    w0 = 1.5
+    w1 = 2
+    w2 = 2.5
+    w3 = -1.5
+    w4 = -2
+    w5 = 3
+    w6 = 3
+    w7 = 0.5
+
+    connections[0].weight = w0
+    connections[1].weight = w1
+    connections[2].weight = w2
+    connections[3].weight = w3
+    connections[4].weight = w4
+    connections[5].weight = w5
+    connections[6].weight = w6
+    connections[7].weight = w7
+
+    a4 = relu((w2 * data[1] + 1) + (w3 * data[2] + 1))
+    a5 = relu((w0 * data[0] + 1) + (w1 * data[1] + 1) + (w4 * a4 + 1))
+    a6 = relu((w6 * a5 + 1) + (w5 * a4 + 1))
+    a7 = sigmoid((w7 * a6 + 1))    
+    
+    a7_actual = graph.forward_propagate(data, inputs, outputs, connections)
+    print("Actual: {0}".format(a7_actual))
+    print("Expected: {0}".format(a7))
+    
+    status = True if (abs(a7_actual[1] - a7) < 0.000001) else False
+
+    print("Status: {0}".format(status))
+
+
+
+    print("--------------------- TEST 3 ----------------------")
+    inputs = [1,2,3]
+    outputs = [4]
+    data = [2, 2, 2]
+
+    connections = [Connection(1,4), Connection(2,4)]
+    connections[0].weight = 2
+    connections[1].weight = -1.5
+
+    print(graph.forward_propagate(data, inputs, outputs, connections))
