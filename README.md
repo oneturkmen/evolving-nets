@@ -10,7 +10,7 @@ Here, I will use Neuroevolution of Augmenting Topologies (NEAT), which optimizes
 
 - [x] Implement fixed-topology network and its evolution (e.g. for balancing a cart pole from OpenAI gym)
 - [ ] Implement NEAT (with some OpenAI environment)
-- [ ] Genotype to phenotype visualization (using NetworkX graph library)
+- [x] Genotype to phenotype visualization (using NetworkX graph library)
 - [ ] Testing at each of progress
 - [ ] Incorporate novelty search for NEAT
 - [ ] Check plasticity and whether it makes sense to incorporate it as well (i.e. for evolution)
