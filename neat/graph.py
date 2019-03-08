@@ -19,6 +19,9 @@ class Graph:
         """
             Checks if a new connection introduces a cycle
             into the graph (graph without cycles is assumed)
+
+            Ref:
+            https://github.com/CodeReclaimers/neat-python/blob/master/neat/graphs.py
         """
         i, o = new_connection
         if i == o:
@@ -28,8 +31,7 @@ class Graph:
         while True:
             num_added = 0
             for a, b in connections:
-                if a in visited and b not in visited:
-                    print(a,b)
+                if a in visited and b not in visited:                    
                     if b == i:
                         return True
                     
@@ -44,6 +46,9 @@ class Graph:
         """
             Returns a set of nodes that are required to compute
             the output of a neural network.
+
+            Ref:
+            https://github.com/CodeReclaimers/neat-python/blob/master/neat/graphs.py
         """
         # Process the connections first
         edges = [
@@ -61,7 +66,7 @@ class Graph:
         while True:
             # Goes backward (i.e. from output layer to input layer)
             t = set(
-                a for (a,b) in edges if b in s and a not in s
+                a for (a, b) in edges if b in s and a not in s
             )
             if not t:
                 break
@@ -84,6 +89,9 @@ class Graph:
 
             Returns a list of sets, where each set in position *i* 
             represents a layer *i + 1*.
+
+            Ref:
+            https://github.com/CodeReclaimers/neat-python/blob/master/neat/graphs.py
         """
 
         # Process the connections first
@@ -102,12 +110,12 @@ class Graph:
 
         while True:
             # Get next nodes
-            c = set(b for (a,b) in edges if a in s and b not in s)
+            c = set(b for (a, b) in edges if a in s and b not in s)
             t = set()
 
             # Add to the layers only if a node is required
             for n in c:
-                if n in required and all(a in s for (a,b) in edges if b == n):
+                if n in required and all(a in s for (a, b) in edges if b == n):
                     t.add(n)
             
             if not t:
@@ -139,6 +147,7 @@ class Graph:
             print("WARNING: No layers in the network!")
             return layer_activations[0]
 
+        # Accumulate activations from the first (input) layer
         for i, layer in enumerate(layers, start = 1):
 
             # For each node in the current layer
@@ -163,12 +172,12 @@ class Graph:
         return layer_activations[-1]
         
     def show_thyself():
-        # TODO : kerascheto za tuk molya zavkshti
-        # Visualizes a NN's architecture
+        # TODO : Keras network architecture visualization implementation
         return
 
 
 # --------------------- TESTING ---------------------
+# TODO: Move to testing environment (unittest package)
 testing = True
 if testing:
     # TESTING
