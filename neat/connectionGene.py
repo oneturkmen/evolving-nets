@@ -34,22 +34,36 @@ class Connection:
         return self.id
 
     def get_weight(self):
+        """
+            Returns weight of the connection
+        """
         return self.weight
-
     
     def get_in_node(self):
-        return self.in_node
-    
+        """
+            Returns the starting node of the connection
+        """
+        return self.in_node    
 
     def get_out_node(self):
+        """
+            Returns the ending node of the connection
+        """
         return self.out_node
 
-
     def mutate_weight(self):
-        # TODO
-        return
+        """
+            Mutates the weight (assigns from a uniform distribution).
 
+        """
+        self.weight += np.random.uniform(low = -2.0, high = 2.0)
+        return
     
-    def mutate_enabled(self):
-        # TODO
+    def toggle_enabled(self):
+        """
+            Disables the connection if enabled; enables otherwise.
+            This is only called when the new node is added to the
+            genome.
+        """
+        self.isEnabled = not self.isEnabled        
         return 
