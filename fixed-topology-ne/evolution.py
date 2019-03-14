@@ -19,7 +19,7 @@ class Evolution:
             best_K - selects best K performing individuals for crossover and next gen
             agents - list of neural networks (i.e. agents)
         """
-        self.env = gym.make('CartPole-v0')
+        self.env = gym.make('MountainCarContinuous-v0')
         self.N = N
         self.best_K = K
         self.agents = [NeuralAgent() for _ in range(self.N)]

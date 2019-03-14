@@ -19,7 +19,7 @@ class NeuralAgent:
             b2 - bias for the 2nd hidden layer (1 neuron)
             reward - agent's (network) reward/fitness
         """
-        self.w1 = np.random.normal(0, 1, 8).reshape((2,4))
+        self.w1 = np.random.normal(0, 1, 4).reshape((2,2))
         self.b1 = np.random.normal(0, 1, 2).reshape((2,1))
         
         self.w2 = np.random.normal(0, 1, 4).reshape((2,2))
@@ -64,6 +64,9 @@ class NeuralAgent:
             Adds reward per episode
         """
         self.reward += r
+
+        if self.reward < 0:
+            self.reward = 0
     
     def get_reward(self):
         """
@@ -77,7 +80,7 @@ class NeuralAgent:
         """
         
         # Mutate each weight
-        self.w1 = self.w1 + np.random.normal(0, 1, 8).reshape((2,4))
+        self.w1 = self.w1 + np.random.normal(0, 1, 4).reshape((2,2))
         self.b1 = self.b1 + np.random.normal(0, 1, 2).reshape((2,1))
         self.w2 = self.w2 + np.random.normal(0, 1, 4).reshape((2,2))
         self.b2 = self.b2 + np.random.normal(0, 1, 2).reshape((2,1))
@@ -96,23 +99,24 @@ class NeuralAgent:
                        which will be fed into the neural network.
         
         returns - action (left or right movement)
-        """
+        """        
         # First hidden layer
         z1 = np.dot(self.w1, observations).reshape((2,1)) + self.b1
-        a1 = self.relu(z1)
+        a1 = self.sigmoid(z1)
         
         # Second hidden layer
         z2 = np.dot(self.w2, a1) + self.b2
-        a2 = self.relu(z2)
+        a2 = self.sigmoid(z2)
 
         # Third layer (output
         z3 = np.dot(self.w3, a2) + self.b3
         a3 = self.tanh(z3)
         
         # Get the output 
-        return 1 if a3 >= 0 else 0
+        #return 1 if a3 >= 0 else 0
+        return a3
 
 
-nn = NeuralAgent()
-action = nn.action([1,2,3,4])
-print(action)
+#nn = NeuralAgent()
+#action = nn.action([1,2,3,4])
+#print(action)
