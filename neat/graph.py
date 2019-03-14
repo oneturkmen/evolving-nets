@@ -151,7 +151,7 @@ class Graph:
             for node in layer:         
                 # Add the sum
                 node_activation = sum([
-                    prev_a * c.get_weight() + 1
+                    prev_a * c.get_weight() + 1 # NOTE: maybe bias should be outside?
                     for (prev_node, prev_a) in layer_activations
                     for c in connections
                     if prev_node == c.get_in_node()
