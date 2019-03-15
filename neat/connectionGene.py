@@ -39,6 +39,14 @@ class Connection:
         """
         return self.weight
     
+    def set_weight(self, w):
+        """
+            Sets weight (not by mutation).
+            Called by Genome.
+        """
+        self.weight = w
+        return
+
     def get_in_node(self):
         """
             Returns the starting node of the connection
@@ -54,7 +62,6 @@ class Connection:
     def mutate_weight(self):
         """
             Mutates the weight (assigns from a uniform distribution).
-
         """
         self.weight += np.random.uniform(low = -2.0, high = 2.0)
         return
