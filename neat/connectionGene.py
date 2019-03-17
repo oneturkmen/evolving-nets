@@ -14,21 +14,33 @@ class Connection:
     """
 
     # Innovation number counter
-    _ids = count(1)
+    innov_counter = count(1)
 
-    def __init__(self, in_node, out_node, isEnabled = True):
-        self.id = next(self._ids)
+    # Table to keep the history of genes
+    innovations = dict()
+
+
+    def __init__(self, in_node, out_node, isEnabled = True):        
         self.in_node = in_node
         self.out_node = out_node
         self.weight = np.random.uniform(low = -2.0, high = 2.0)
         self.isEnabled = True
+
+        # Historical markings: check if the connection gene has already been
+        # somewhere.
+        if (in_node, out_node) in self.innovations.keys():
+            self.innov = self.innovations[(in_node, out_node)]
+        else:
+            innov_new = next(self.innov_counter)
+            self.innovations[(in_node, out_node)] = innov_new
+            self.innov = innov_new
 
     def is_enabled(self):
         return self.isEnabled
 
     def get_innov(self):
         """ Returns unique innovation number. """
-        return self.id
+        return self.innov
 
     def get_weight(self):
         """ Returns weight of the connection. """

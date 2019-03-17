@@ -19,7 +19,21 @@ MUTATION:  Each genome will mutate on its own. Function is called in Selection
 """
 
 # TODO
-class Population:
+class Evolution:
     def __init__(self):
-        self.genomes = []
-        self.best_genome = []
+        self.population = []
+        self.best_genome = []    
+
+    def initialize_population():
+        # TODO
+        return
+    
+    def evolve():
+        # TODO
+        return 
+
+    def evolve_step():
+        # TODO
+        return
+        
+
