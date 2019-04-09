@@ -14,12 +14,21 @@ import numpy as np
 from genome import Genome
 from connectionGene import Connection
 
+
+# For comparisons of floats
+EPSILON = 0.0000001
+
+# Helper for comparison
+def equal(a, b):
+    return abs(a - b) < EPSILON
+
+
 # TODO: have to thoroughly test this function (edge cases and load testing)
 def crossover(p, q):
     """ This function defines the crossover operation. For more details,
         please refer to NEAT paper (cited in the report).
         
-        It expects p and q to be instances of Genome
+        It expects p and q to be instances of Genome.
     """
     assert isinstance(p, Genome), "First parent is not an instance of Genome!"
     assert isinstance(q, Genome), "Second parent is not an instance of Genome!"
@@ -65,7 +74,7 @@ def crossover(p, q):
             # If scored equally, choose randomly
             if A_score > B_score:      
                 offspring.append(A_genes[i])            
-            elif A_score == B_score and np.random.rand() > 0.5:
+            elif equal(A_score, B_score) and np.random.rand() > 0.5:
                 offspring.append(A_genes[i])
             
             # Increment only left pointer
@@ -75,7 +84,7 @@ def crossover(p, q):
             # If scored equally, choose randomly
             if B_score > A_score:
                 offspring.append(B_genes[j])            
-            elif A_score == B_score and np.random.rand() > 0.5:
+            elif equal(A_score, B_score) and np.random.rand() > 0.5:
                 offspring.append(B_genes[j])
 
             # Increment only right pointer
@@ -86,8 +95,8 @@ def crossover(p, q):
     if A_score > B_score and i < len(A_genes):
         offspring += A_genes[i:]
     elif B_score > A_score and j < len(B_genes):
-        offspring += B_genes[j:]
-    elif A_score == B_score and abs(len(A_genes) - len(B_genes)) > 0:
+        offspring += B_genes[j:]    
+    elif equal(A_score, B_score) and abs(len(A_genes) - len(B_genes)) > 0:
         # If scores are the same yet one of the genomes is bigger, choose 
         # excess connections randomly
         while i < len(A_genes):
@@ -159,7 +168,7 @@ if testing:
 
         # Testing crossover        
         genome1.add_score(25)
-        genome2.add_score(22)
+        genome2.add_score(25)
 
         offspring = crossover(genome1, genome2)
         
