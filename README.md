@@ -8,13 +8,24 @@ Here, I will use Neuroevolution of Augmenting Topologies (NEAT), which optimizes
 
 ## What shall be done
 
-- [x] Implement fixed-topology network and its evolution (e.g. for balancing a cart pole from OpenAI gym)
-- [ ] Implement NEAT (with some OpenAI environment)
-- [x] Genotype to phenotype visualization (using NetworkX graph library)
-- [ ] Testing at each of progress
-- [ ] Incorporate novelty search for NEAT
+- [x] Implement fixed-topology network and its evolution (e.g. for balancing a cart pole from OpenAI gym).
+- [x] Implement NEAT (with some OpenAI environment).
+- [x] Genotype to phenotype visualization (using NetworkX graph library).
+- [x] Testing at each of progress.
+
+## Feature ideas
+
+### Concept
+
+- [ ] Incorporate novelty search for NEAT.
 - [ ] Check plasticity and whether it makes sense to incorporate it as well (i.e. for evolution)
 - [ ] Co-evolutionatiry methods? Research needed.
+
+### Infrastructure
+
+- [ ] Leverage multiple threads for better performance.
+- [ ] Add unit testing module and more unit tests. It would be better to add extra testing layers, i.e. integration, smoke, regression, etc. whatever is necessary for better testability and reliability.
+- [ ] Use Docker and package manager to automate the installation and change of packages/modules/etc.
 
 ## Contents
 
