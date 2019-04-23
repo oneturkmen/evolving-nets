@@ -24,7 +24,7 @@ class Connection:
         self.in_node = in_node
         self.out_node = out_node
         self.weight = np.random.uniform(low = -2.0, high = 2.0)
-        self.isEnabled = True
+        self.isEnabled = isEnabled
 
         # Historical markings: check if the connection gene has already been
         # somewhere.

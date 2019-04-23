@@ -12,7 +12,10 @@ called here after selection.
 import operator
 import numpy as np
 from genome import Genome
+
+# For testing
 from connectionGene import Connection
+
 
 
 # For comparisons of floats
@@ -60,10 +63,10 @@ def crossover(p, q):
         if A_i_innov == B_j_innov:
             # Choose randomly
             if np.random.rand() > 0.5:
-                print("Accepting A")
+                #print("Accepting A")
                 offspring.append(A_genes[i])
             else:
-                print("Accepting B")
+                #print("Accepting B")
                 offspring.append(B_genes[j])
 
             # Increment both pointers

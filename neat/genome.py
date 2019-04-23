@@ -46,9 +46,15 @@ class Genome:
         c = np.random.choice(self.connection_genes)
 
         # Make sure connection is enabled
+        falsity_flag = 0
         while not c.is_enabled():
             c = np.random.choice(self.connection_genes)
-        
+            falsity_flag += 1
+
+            if falsity_flag > 20:
+                print(">>> [WARNING]: Cannot choose connection!")
+                return
+                
         # Create new node with the i = max(greatest_node_id) + 1
         nodes = list(set(
             [z.get_in_node()  for z in self.connection_genes] + 
@@ -135,7 +141,7 @@ class Genome:
 
         return self.connection_genes
 
-    def forward_propagate(self, data):
+    def action(self, data):
         assert self.initialized == True, "Genome should be first initialized!"
         assert len(self.input_nodes) > 0, "List of inputs is empty!"
         assert len(self.output_nodes) > 0, "List of outputs is empty!"
@@ -147,7 +153,10 @@ class Genome:
         )
 
         # Output === aggregate activation from the last layer
-        return output
+        #print("OUTPUT = {0}".format(output))
+
+        # Get only the output part
+        return 1 if output[1] >= 0.5 else 0
 
     def reset_score(self):
         """ Resets the score. """        
@@ -185,6 +194,7 @@ class Genome:
 
         # Set the inputs, outputs, and connections
         self.connection_genes = connections
+        #print("xoxoxo {0}".format([c.is_enabled() for c in self.connection_genes]))
         self.input_nodes = inputs
         self.output_nodes = outputs
         self.score = 0
@@ -229,9 +239,9 @@ class Genome:
         assert self.initialized == True, "Genome should be first initialized!"
 
         # Weight mutation
-        if np.random.rand() < 0.10:
-            self.mutate_connection_weights()
-        
+        # if np.random.rand() < 0.10:
+        #     self.mutate_connection_weights()        
+
         # Structural mutation: adding a node
         if np.random.rand() < 0.10:
             self.add_node()
@@ -239,6 +249,11 @@ class Genome:
         # Structural mutation: adding a connection (edge)
         if np.random.rand() < 0.10:
             self.add_connection()
+
+        # Toggle enabled/disabled
+        for conn in self.connection_genes:
+            if np.random.rand() < 0.05:
+                conn.toggle_enabled()
 
         return
 
@@ -250,6 +265,42 @@ class Genome:
         assert len(self.connection_genes) > 0, "There are no connection genes!"
 
         return visualize(self.input_nodes, self.output_nodes, self.connection_genes)
+
+    def distance(self, other):
+        # Get their innovations
+        innovations_a = [c.get_innov() for c in self.get_connections()]
+        innovations_b = [c.get_innov() for c in other.get_connections()]
+
+        # Find the excess level
+        N = max(len(innovations_a), len(innovations_b))
+        excess_threshold = min(max(innovations_a), max(innovations_b))
+
+        # Find number of disjoint nodes
+        num_disjoint = 0
+        num_excess = 0
+
+        # Accumulator weight differences
+        W_bar = 0
+        W_c = 0
+
+        # Count number of disjoint nodes from parent B
+        for id in innovations_a:
+            if id not in innovations_b:
+                if id > excess_threshold:
+                    num_excess += 1
+                else:
+                    num_disjoint += 1
+
+        # Count number of disjoint nodes from parent A
+        for id in innovations_b:
+            if id not in innovations_a:
+                if id > excess_threshold:
+                    num_excess += 1
+                else:
+                    num_disjoint += 1
+        
+        # Get the weight differences: TODO
+        return (num_disjoint, num_excess, N)
 
 
 # -------------------------- TESTING ----------------------------
@@ -387,7 +438,7 @@ if testing:
         a6 = relu((w6 * a5) + (w5 * a4) + 1)
         a7 = sigmoid((w7 * a6) + 1)
         
-        a7_actual = genome.forward_propagate(data)
+        a7_actual = genome.action(data)
         print("Actual: {0}".format(a7_actual))
         print("Expected: {0}".format(a7))
         
@@ -395,8 +446,44 @@ if testing:
 
         print("Status: {0}".format(status))
 
+    
+    def test_distance_function():
+        genome_a = Genome()
+        genome_b = Genome()
+
+        genome_a.initialize(3,2)
+        genome_b.initialize(3,2)
+
+        print("Inputs A = {0}".format(genome_a.get_inputs()))
+        print("Outputs A = {0}".format(genome_a.get_outputs()))
+        print("Connections A = {0}".format([
+            (c.get_in_node(), c.get_out_node(), c.is_enabled())
+            for c in genome_a.get_connections()
+        ]))
+
+        connections_new = [
+            (1, 4), (2, 4), (1, 6), (2, 6), (3, 7), (6, 4), (6, 5), (7, 5)
+        ]
+        genome_b.connection_genes = [ Connection(a, b) for a, b in connections_new]
+
+        # Print the ids so far
+        print("Connections IDs for genome A = {0}".format([
+            c.get_innov()
+            for c in genome_a.get_connections()
+        ]))
+        print("Connections IDs for genome B = {0}".format([
+            c.get_innov()
+            for c in genome_b.get_connections()
+        ]))
+        
+        # Find the distance
+        distance = genome_a.distance(genome_b)
+        print("Distance between 2 nodes is {0}".format(distance))
+
+
     # ----------- RUNNING TESTS -----------    
     # test_adding_node()
     # test_adding_connection()
     # test_mutating_weight()
-    #test_forward_prop_delegation()
+    # test_forward_prop_delegation()
+    # test_distance_function()
