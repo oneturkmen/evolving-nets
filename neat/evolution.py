@@ -66,6 +66,9 @@ class Evolution:
     ############ - Private methods - ############
 
     def __fitness_normalizer(self, genomes_scored):
+        """ Normalizes the fitness of all genomes for speciation. """
+        assert len(genomes_scored) > 0, "Genomes list cannot empty!"
+        
         # Container for normalized genomes
         genomes_normed = []
 
@@ -116,6 +119,7 @@ class Evolution:
         return initial_population
         
     def evolve_step(self, n = 300, verbose = False):
+        """ Runs a Gym simulation n times, with actions and rewards. """
         genome_c = 0
         for genome in self.genomes:
             
@@ -136,6 +140,7 @@ class Evolution:
     
 
     def reset(self):
+        """ Resets the genomes score for better performance metric. """
         for genome in self.genomes:
             genome.reset_score()
         return
@@ -194,10 +199,18 @@ class Evolution:
 
     ############ - Public methods - ############
     def evolve(self, n):
+        """ Runs evolutionary process for n steps (generations). """
+        assert
+
+        # Prepare the genomes
         self.reset()
+        
+        # Whether the performance details should be printed
         verbose = False
+
         for i in range(n):
-            
+
+            # Print information every 50th time            
             if i % 50 == 0:
                 print("Generation {0}".format(i))
                 verbose = True
@@ -207,8 +220,8 @@ class Evolution:
             # Evolve!
             self.evolve_step(verbose = verbose)
 
-            # Termination condition: if the average score is more than 199.
-            # Checks only every 50 generations (it's expensive!)
+            # Termination condition that depends on 
+            # the maximum performance of a Gym environment
             #if i % 100 == 0 and self.get_average() > 198.0:
                 # enough is enough!
                 #break
@@ -216,11 +229,7 @@ class Evolution:
             self.selection()
             self.mutation()
             
-            # NOTE: I reset the score since accumulation of score of some genome
-            # ruins the evolution. How? If a genome initially gets some score, even
-            # though it performs not as good as initially, its score will get accumulated
-            # and its weights gonna spread out to children (epidemic)
-            # This is what fixed my convergence (getting a well-trained agent).
+            # Reset the score every 10 generations for better performance metric
             if i % 10 == 0:
                 self.reset()
     

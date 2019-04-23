@@ -267,6 +267,9 @@ class Genome:
         return visualize(self.input_nodes, self.output_nodes, self.connection_genes)
 
     def distance(self, other):
+        """ Computes the representation distance between two genomes """
+        assert self.initialized == True, "Genome should be first initialized!"
+        assert isinstance(other, Genome), "Other genome is not an instance of Genome!"
         # Get their innovations
         innovations_a = [c.get_innov() for c in self.get_connections()]
         innovations_b = [c.get_innov() for c in other.get_connections()]
