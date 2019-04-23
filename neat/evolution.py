@@ -21,6 +21,7 @@ MUTATION:  Each genome will mutate on its own. Function is called in Selection
 import gym
 import numpy as np
 import operator
+import copy
 
 from genome import Genome
 from reproduction import crossover
@@ -198,9 +199,25 @@ class Evolution:
     
 
     ############ - Public methods - ############
+    def get_best_genome(self):
+        """ Gets best performing agent at the time when this func is called. """
+        genomes = copy.deepcopy(self.genomes)
+        genomes.sort(key = lambda λ : λ.get_score())
+        return genomes[-1]
+
+    def get_average(self):
+        """ Returns average score in a population. """
+        # Gets the mode of a list (most frequently appearing number)
+        genomes_scores = [genome.get_score() for genome in self.genomes]
+        
+        average = sum(genomes_scores) / len(genomes_scores)
+        print("Average = {0}".format(average))
+        
+        return average
+
     def evolve(self, n):
         """ Runs evolutionary process for n steps (generations). """
-        assert
+        assert n > 0, "Cannot evolve 0 or less generations!"
 
         # Prepare the genomes
         self.reset()
@@ -241,7 +258,7 @@ class Evolution:
     #   pass
     #
 
-testing = True
+testing = False
 if testing:
     darwin = Evolution()
     #darwin.selection()
