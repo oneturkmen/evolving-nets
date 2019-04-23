@@ -26,6 +26,10 @@ In this repo, you will find the implementation of NEAT and potentially its varia
 
 ![oh_hi_mark](./neat/images/test_im.png)
 
+## Performance of a genetic algorithm optimizing fixed topology NN
+
+![stats](./stats/fixed_topology_stats.png)
+
 ### References
 
 [1] - Kenneth O. Stanley and Risto Miikkulainen. Evolving Neural Networks through Augmenting Topologies. *The MIT Press*, 2002.

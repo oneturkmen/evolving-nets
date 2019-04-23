@@ -6,15 +6,13 @@
 from activations import sigmoid, relu
 
 class Graph:
-    """
-        This class dynamically constructs a directed graph, 
+    """ This class dynamically constructs a directed graph, 
         implements forward propagation of data and keeps 
         the evaluated fitness score.
     """    
 
     def creates_cycle(self, connections, new_connection):
-        """
-            Checks if a new connection introduces a cycle
+        """ Checks if a new connection introduces a cycle
             into the graph (graph without cycles is assumed)
 
             Ref:
@@ -40,8 +38,7 @@ class Graph:
 
     
     def required_for_output(self, inputs, outputs, connections):
-        """
-            Returns a set of nodes that are required to compute
+        """ Returns a set of nodes that are required to compute
             the output of a neural network.
 
             Ref:
@@ -80,8 +77,7 @@ class Graph:
 
 
     def set_up_layers(self, inputs, outputs, connections):
-        """
-            Sets up layers of a neural network given input nodes, 
+        """ Sets up layers of a neural network given input nodes, 
             output nodes, and edges between them (if any).
 
             Returns a list of sets, where each set in position *i* 
@@ -126,8 +122,7 @@ class Graph:
 
 
     def forward_propagate(self, data, inputs, outputs, connections):
-        """
-            Dynamically constructs a directed graph and forward 
+        """ Dynamically constructs a directed graph and forward 
             propagates the data to get the output (e.g. dog or cat).
         """
         # Sanity check
@@ -149,9 +144,9 @@ class Graph:
 
             # For each node in the current layer
             for node in layer:         
-                # Add the sum
-                node_activation = sum([
-                    prev_a * c.get_weight() + 1 # NOTE: maybe bias should be outside?
+                # Add bias (==1) to the sum of previous activations
+                node_activation = 1 + sum([
+                    prev_a * c.get_weight()
                     for (prev_node, prev_a) in layer_activations
                     for c in connections
                     if prev_node == c.get_in_node()

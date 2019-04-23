@@ -35,7 +35,7 @@ def visualize(inputs, outputs, connections):
     
     nx.draw(DG,
         node_color = colors,
-        with_labels = True
+        with_labels = True,
         font_weight = 'bold'
     )
 
