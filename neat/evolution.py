@@ -23,6 +23,8 @@ import numpy as np
 import operator
 import copy
 
+import ray
+
 from genome import Genome
 from reproduction import crossover
 
@@ -118,7 +120,43 @@ class Evolution:
             genome.initialize(*self.env_dims)        
 
         return initial_population
+
+    @ray.remote
+    def evolve_step_single(self, genome, n = 300):
+        observation = self.env.reset()
+
+        for t in range(n):
+            observation, reward, done, _ = self.env.step(genome.action(observation))
+            genome.add_score(reward)
+            
+            if done:
+                observation = self.env.reset()
+                break
         
+        #if verbose:
+        #    print("Agent {0} reward = {1}".format(genome_c, genome.get_score()))
+        return
+
+    def evolve_step_threaded(self, verbose = False):
+        ray.init()
+
+        s_genomes = self.genomes
+        # open the urls in their own threads
+        # and return the results
+        results = ray.get([
+            self.evolve_step_single.remote(genome) 
+            for genome in s_genomes
+        ])
+
+        # close the pool and wait for the work to finish 
+        # pool.close() 
+        # pool.join()
+        
+        if verbose:
+            for i in range(len(self.genomes)):
+                print("Agent {0} reward = {1}".format(i, self.genomes[i].get_score()))
+        return
+    
     def evolve_step(self, n = 300, verbose = False):
         """ Runs a Gym simulation n times, with actions and rewards. """
         genome_c = 0
@@ -235,7 +273,8 @@ class Evolution:
                 verbose = False
             
             # Evolve!
-            self.evolve_step(verbose = verbose)
+            #self.evolve_step(verbose = verbose)
+            self.evolve_step_threaded(verbose = verbose)
 
             # Termination condition that depends on 
             # the maximum performance of a Gym environment
