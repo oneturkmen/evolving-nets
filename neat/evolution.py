@@ -253,14 +253,13 @@ class Evolution:
 
             # Termination condition that depends on 
             # the maximum performance of a Gym environment
-            if i % 50 == 0 and self.get_average() > 150.0:
+            if i % 50 == 0 and self.get_average() > 180.0:
                 break
 
             self.selection()
             self.mutation()
             
-            # Reset the score every 10 generations for better performance metric
-            #if i % 2 == 0:
+            # Reset the score every generation for better performance metric
             self.reset()    
 
 
