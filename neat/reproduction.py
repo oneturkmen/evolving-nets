@@ -47,7 +47,7 @@ def crossover(p, q):
 
     # Sort the connection genes by innovation number
     A_genes = sorted(p.get_connections(), key = operator.attrgetter('innov'))
-    B_genes = sorted(q.get_connections(), key = operator.attrgetter('innov'))
+    B_genes = sorted(q.get_connections(), key = operator.attrgetter('innov'))    
 
     # Single child
     offspring = []
@@ -77,8 +77,11 @@ def crossover(p, q):
             # If scored equally, choose randomly
             if A_score > B_score:      
                 offspring.append(A_genes[i])            
-            elif equal(A_score, B_score) and np.random.rand() > 0.5:
-                offspring.append(A_genes[i])
+            elif equal(A_score, B_score):
+                if np.random.rand() > 0.5:
+                    offspring.append(A_genes[i])
+                else:
+                    offspring.append(B_genes[j])
             
             # Increment only left pointer
             i += 1    
@@ -87,8 +90,11 @@ def crossover(p, q):
             # If scored equally, choose randomly
             if B_score > A_score:
                 offspring.append(B_genes[j])            
-            elif equal(A_score, B_score) and np.random.rand() > 0.5:
-                offspring.append(B_genes[j])
+            elif equal(A_score, B_score):# and np.random.rand() > 0.5:
+                if np.random.rand() > 0.5:
+                    offspring.append(A_genes[i])
+                else:
+                    offspring.append(B_genes[j])
 
             # Increment only right pointer
             j += 1 
@@ -127,7 +133,7 @@ def crossover(p, q):
 
 ###### -------------------------------- TEST -------------------------------
 
-testing = False
+testing = True
 if testing:
     
     def test_1_light():

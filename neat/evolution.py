@@ -33,7 +33,7 @@ class Evolution:
         for NEAT.
     """
 
-    def __init__(self, N = 10, K = 5, C1 = 1, C2 = 1, C3 = 1, env_dims = (4, 1)):
+    def __init__(self, N = 10, K = 5, C1 = 0.5, C2 = 0.5, C3 = 0.5, env_dims = (4, 1)):
         """ Initializes the population, sets the environment,
             keeps track of the best genome.
 
@@ -62,7 +62,8 @@ class Evolution:
         #self.distances = {}
 
         # TODO: later
-        # self.stats = []
+        self.stats_best_genome = []
+        self.stats_aver_genome = []
 
     ############ - Private methods - ############
 
@@ -91,14 +92,15 @@ class Evolution:
 
             # Score normalization
             score_normalized = 0
-            norm_condition = self.C1 * num_disjoint + self.C2 * num_excess
-            if norm_condition > 10:
-                score_normalized = genomes_scored[i][1] / 10
+            norm_condition = self.C1 * num_disjoint + self.C2 * num_excess + self.C3 * N
+            if norm_condition > 15:
+                #print("Condition I")
+                score_normalized = genomes_scored[i][1] / 3
             elif norm_condition > 5:
-                score_normalized = genomes_scored[i][1] / 5
-            elif norm_condition > 2:
+                #print("Condition II")
                 score_normalized = genomes_scored[i][1] / 2
             else:
+                #print("Condition III")
                 score_normalized = genomes_scored[i][1]
 
             genomes_normed.append((genomes_scored[i][0], score_normalized))
@@ -119,7 +121,7 @@ class Evolution:
 
         return initial_population
         
-    def evolve_step(self, n = 300, verbose = False):
+    def evolve_step(self, n = 250, verbose = False):
         """ Runs a Gym simulation n times, with actions and rewards. """
         genome_c = 0
         for genome in self.genomes:
@@ -128,7 +130,7 @@ class Evolution:
             
             for t in range(n):
                 observation, reward, done, _ = self.env.step(genome.action(observation))                
-                genome.add_score(reward)
+                genome.add_score(reward)                
                 
                 if done:
                     break
@@ -161,6 +163,10 @@ class Evolution:
         genomes_scores_norm.sort(key = operator.itemgetter(1), reverse=True)
         genomes_scores_norm = genomes_scores_norm[0 : len(genomes_scores_norm) // 2]
         new_genomes = [ genome for (genome, _) in genomes_scores_norm ]
+
+        # Keep stats
+        self.stats_aver_genome.append(self.get_average())
+        self.stats_best_genome.append(genomes_scores_norm[0][1])
 
         # Crossover
         for i in range(len(genomes_scores_norm)):
@@ -199,6 +205,14 @@ class Evolution:
     
 
     ############ - Public methods - ############
+    def get_statistics(self):
+        # X is generation number
+        X = [i + 1 for i in range( len(self.stats_aver_genome) )]
+        Y_aver = copy.deepcopy(self.stats_aver_genome)
+        Y_best = copy.deepcopy(self.stats_best_genome)
+        
+        return (X, Y_aver, Y_best)
+
     def get_best_genome(self):
         """ Gets best performing agent at the time when this func is called. """
         genomes = copy.deepcopy(self.genomes)
@@ -211,7 +225,7 @@ class Evolution:
         genomes_scores = [genome.get_score() for genome in self.genomes]
         
         average = sum(genomes_scores) / len(genomes_scores)
-        print("Average = {0}".format(average))
+        #print("Average = {0}".format(average))
         
         return average
 
@@ -239,24 +253,16 @@ class Evolution:
 
             # Termination condition that depends on 
             # the maximum performance of a Gym environment
-            #if i % 100 == 0 and self.get_average() > 198.0:
-                # enough is enough!
-                #break
+            if i % 50 == 0 and self.get_average() > 150.0:
+                break
 
             self.selection()
             self.mutation()
             
             # Reset the score every 10 generations for better performance metric
-            if i % 10 == 0:
-                self.reset()
-    
-    # TODO:
-    # def get_best_genome():
-    #   pass
-    # 
-    # def get_statistics():
-    #   pass
-    #
+            #if i % 2 == 0:
+            self.reset()    
+
 
 testing = False
 if testing:

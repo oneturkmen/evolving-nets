@@ -137,6 +137,7 @@ class Graph:
         # If direct network, then return
         if not layers:
             print("WARNING: No layers in the network!")
+            print([(c.get_in_node(), c.get_out_node(), c.is_enabled())for c in connections])
             return layer_activations[0]
 
         # Accumulate activations from the first (input) layer

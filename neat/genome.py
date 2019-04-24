@@ -33,6 +33,7 @@ class Genome:
 
     def mutate_connection_weights(self):
         """Weight mutation: perturbs the weights of all connections"""
+        assert self.initialized == True, "Genome should be first initialized!"
         for connection in self.connection_genes:
             connection.mutate_weight()
         return
@@ -43,18 +44,16 @@ class Genome:
         assert len(self.connection_genes) > 0, "Genome cannot not have connections!"
         
         # Randomly select an edge
-        c = np.random.choice(self.connection_genes)
+        valid_connections = [c for c in self.connection_genes if c.is_enabled() == True]
 
-        # Make sure connection is enabled
-        falsity_flag = 0
-        while not c.is_enabled():
-            c = np.random.choice(self.connection_genes)
-            falsity_flag += 1
+        # If no valid connections, just return (sorry, next time!)
+        if len(valid_connections) == 0:
+            print(">>> [WARNING]: Cannot choose connection!")
+            return
+        
+        # Choose a valid connection
+        c = np.random.choice(valid_connections)
 
-            if falsity_flag > 20:
-                print(">>> [WARNING]: Cannot choose connection!")
-                return
-                
         # Create new node with the i = max(greatest_node_id) + 1
         nodes = list(set(
             [z.get_in_node()  for z in self.connection_genes] + 
@@ -73,6 +72,8 @@ class Genome:
         self.connection_genes.append(right_connection)
 
         # Disable old connection
+        if not c.is_enabled():
+            print(">>> [WARNING]: Connection already disabled!")
         c.toggle_enabled()
 
         return
@@ -239,8 +240,8 @@ class Genome:
         assert self.initialized == True, "Genome should be first initialized!"
 
         # Weight mutation
-        # if np.random.rand() < 0.10:
-        #     self.mutate_connection_weights()        
+        if np.random.rand() < 0.05:
+            self.mutate_connection_weights()        
 
         # Structural mutation: adding a node
         if np.random.rand() < 0.10:
@@ -252,7 +253,7 @@ class Genome:
 
         # Toggle enabled/disabled
         for conn in self.connection_genes:
-            if np.random.rand() < 0.05:
+            if np.random.rand() < 0.05 and not conn.is_enabled():
                 conn.toggle_enabled()
 
         return

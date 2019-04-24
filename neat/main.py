@@ -7,13 +7,14 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 from evolution import Evolution
+from visual import visualize
 
 def run():
     # Initialize
-    darwinian = Evolution(16, 8)
+    darwinian = Evolution(15, 6)
 
     # Evolve
-    darwinian.evolve(300)
+    darwinian.evolve(150)
 
     # Get the best agent
     best_genome = darwinian.get_best_genome()
@@ -30,12 +31,18 @@ def run():
                 print("Episode finished after {} timesteps".format(t+1))
                 break
     
+    # Display the network architecture
+    visualize(best_genome.get_inputs(), 
+        best_genome.get_outputs(), best_genome.get_connections())
+    
     # Plot the statistics
-    #stats = darwinian.getStats()
-    #plt.plot(stats[0], stats[1])
-    #plt.ylabel("Best Rewarded Genome")
-    #plt.xlabel("Generation")
-    #plt.show()
+    stats = darwinian.get_statistics()
+    plt.plot(stats[0], stats[1]) # average
+    plt.plot(stats[0], stats[2]) # best
+    plt.ylabel("Reward")
+    plt.xlabel("Generation")
+    plt.legend(['average', 'best'], loc='upper left')
+    plt.show()
     
     # Sleep a bit
     time.sleep(1)

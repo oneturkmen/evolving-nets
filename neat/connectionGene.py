@@ -23,7 +23,7 @@ class Connection:
     def __init__(self, in_node, out_node, isEnabled = True):        
         self.in_node = in_node
         self.out_node = out_node
-        self.weight = np.random.uniform(low = -2.0, high = 2.0)
+        self.weight = np.random.uniform(low = -3.0, high = 3.0)
         self.isEnabled = isEnabled
 
         # Historical markings: check if the connection gene has already been
@@ -61,7 +61,7 @@ class Connection:
 
     def mutate_weight(self):
         """ Mutates the weight (assigns from a uniform distribution). """
-        self.weight += np.random.uniform(low = -3.0, high = 3.0)
+        self.weight += np.random.uniform(low = -2.0, high = 2.0)
         return
     
     def toggle_enabled(self):
