@@ -11,6 +11,7 @@ called here after selection.
 
 import operator
 import numpy as np
+from copy import deepcopy
 from genome import Genome
 
 # For testing
@@ -64,10 +65,10 @@ def crossover(p, q):
             # Choose randomly
             if np.random.rand() > 0.5:
                 #print("Accepting A")
-                offspring.append(A_genes[i])
+                offspring.append(deepcopy(A_genes[i]))
             else:
                 #print("Accepting B")
-                offspring.append(B_genes[j])
+                offspring.append(deepcopy(B_genes[j]))
 
             # Increment both pointers
             i += 1
@@ -79,9 +80,9 @@ def crossover(p, q):
                 offspring.append(A_genes[i])            
             elif equal(A_score, B_score):
                 if np.random.rand() > 0.5:
-                    offspring.append(A_genes[i])
+                    offspring.append(deepcopy(A_genes[i]))
                 else:
-                    offspring.append(B_genes[j])
+                    offspring.append(deepcopy(B_genes[j]))
             
             # Increment only left pointer
             i += 1    
@@ -89,12 +90,12 @@ def crossover(p, q):
             # Append right disjoint connection only if right genome scored higher
             # If scored equally, choose randomly
             if B_score > A_score:
-                offspring.append(B_genes[j])            
-            elif equal(A_score, B_score):# and np.random.rand() > 0.5:
+                offspring.append(deepcopy(B_genes[j]))
+            elif equal(A_score, B_score):
                 if np.random.rand() > 0.5:
-                    offspring.append(A_genes[i])
+                    offspring.append(deepcopy(A_genes[i]))
                 else:
-                    offspring.append(B_genes[j])
+                    offspring.append(deepcopy(B_genes[j]))
 
             # Increment only right pointer
             j += 1 
@@ -102,21 +103,21 @@ def crossover(p, q):
     # Choose excess numbers randomly if scored equally
     # Otherwise, choose from the fitter parent
     if A_score > B_score and i < len(A_genes):
-        offspring += A_genes[i:]
+        offspring += deepcopy(A_genes[i:])
     elif B_score > A_score and j < len(B_genes):
-        offspring += B_genes[j:]    
+        offspring += deepcopy(B_genes[j:])
     elif equal(A_score, B_score) and abs(len(A_genes) - len(B_genes)) > 0:
         # If scores are the same yet one of the genomes is bigger, choose 
         # excess connections randomly
         while i < len(A_genes):
             if np.random.rand() > 0.5:
-                offspring.append(A_genes[i])
+                offspring.append(deepcopy(A_genes[i]))
             
             i += 1
     
         while j < len(B_genes):
             if np.random.rand() > 0.5:
-                offspring.append(B_genes[j])
+                offspring.append(deepcopy(B_genes[j]))
             
             j += 1
         
