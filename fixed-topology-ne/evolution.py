@@ -171,5 +171,5 @@ class Evolution:
     
     def get_best_agent(self):
         agents = copy.deepcopy(self.agents)
-        agents.sort(key = lambda x : x.reward)        
+        agents.sort(key = lambda x : x.reward)
         return agents[-1]

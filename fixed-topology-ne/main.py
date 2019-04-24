@@ -10,7 +10,7 @@ from evolution import Evolution
 
 def test():
     # Initialize
-    darwinian = Evolution(16, 8)
+    darwinian = Evolution(10, 5)
 
     # Evolve
     darwinian.evolve(1000)
