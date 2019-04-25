@@ -134,7 +134,7 @@ def crossover(p, q):
 
 ###### -------------------------------- TEST -------------------------------
 
-testing = True
+testing = False
 if testing:
     
     def test_1_light():
