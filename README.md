@@ -1,4 +1,4 @@
-## Evolving Neural Networks (WIP)
+## Evolving Neural Networks
 
 ### About
 
