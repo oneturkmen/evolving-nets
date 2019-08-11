@@ -1,0 +1,10 @@
+language: python
+python:
+    - "3.6"
+
+install:
+    - pip install -r neat/requirements.txt
+
+script:
+    - cd neat/tests
+    - python3 -m unittest discover

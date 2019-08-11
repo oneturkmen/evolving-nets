@@ -1,0 +1,7 @@
+####### Author: oneturkmen #######
+####### Year  : 2019       #######
+
+numpy >= 1.16
+matplotlib >= 2.1
+networkx >= 2.2
+gym == 0.10.8
