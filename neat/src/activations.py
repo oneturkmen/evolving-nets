@@ -5,9 +5,7 @@
 
 import numpy as np
 
-"""
-    Contains the list of activation functions for nodes.
-"""
+""" Contains the list of activation functions for nodes. """
 
 def sigmoid(x):
     return 1. / (1. + np.exp(-x))

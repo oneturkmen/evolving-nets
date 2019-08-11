@@ -6,10 +6,10 @@
 from activations import sigmoid, relu
 
 class Graph:
-    """ This class dynamically constructs a directed graph, 
-        implements forward propagation of data and keeps 
+    """ This class dynamically constructs a directed graph,
+        implements forward propagation of data and keeps
         the evaluated fitness score.
-    """    
+    """
 
     def creates_cycle(self, connections, new_connection):
         """ Checks if a new connection introduces a cycle
@@ -21,22 +21,22 @@ class Graph:
         i, o = new_connection
         if i == o:
             return True
-        
+
         visited = {o}
         while True:
             num_added = 0
             for a, b in connections:
-                if a in visited and b not in visited:                    
+                if a in visited and b not in visited:
                     if b == i:
                         return True
-                    
+
                     visited.add(b)
                     num_added += 1
-            
+
             if num_added == 0:
                 return False
 
-    
+
     def required_for_output(self, inputs, outputs, connections):
         """ Returns a set of nodes that are required to compute
             the output of a neural network.
@@ -49,7 +49,7 @@ class Graph:
             (connection.get_in_node(), connection.get_out_node())
             for connection in connections
         ]
-        
+
         # edges = connections
 
         # Get the set with all required nodes
@@ -64,12 +64,12 @@ class Graph:
             )
             if not t:
                 break
-            
+
             # Keep all non-input nodes (including output nodes)
             layer_nodes = set(x for x in t if x not in inputs)
             if not layer_nodes:
                 break
-            
+
             required = required.union(layer_nodes)
             s = s.union(t)
 
@@ -77,10 +77,10 @@ class Graph:
 
 
     def set_up_layers(self, inputs, outputs, connections):
-        """ Sets up layers of a neural network given input nodes, 
+        """ Sets up layers of a neural network given input nodes,
             output nodes, and edges between them (if any).
 
-            Returns a list of sets, where each set in position *i* 
+            Returns a list of sets, where each set in position *i*
             represents a layer *i + 1*.
 
             Ref:
@@ -92,7 +92,7 @@ class Graph:
             (connection.get_in_node(), connection.get_out_node())
             for connection in connections
         ]
-        
+
         # edges = connections
 
         # Gets nodes that are required for computing output
@@ -110,10 +110,10 @@ class Graph:
             for n in c:
                 if n in required and all(a in s for (a, b) in edges if b == n):
                     t.add(n)
-            
+
             if not t:
                 break
-            
+
             # Append newly-constructed layer (as a set) to the list
             layers.append(t)
             s = s.union(t)
@@ -122,7 +122,7 @@ class Graph:
 
 
     def forward_propagate(self, data, inputs, outputs, connections):
-        """ Dynamically constructs a directed graph and forward 
+        """ Dynamically constructs a directed graph and forward
             propagates the data to get the output (e.g. dog or cat).
         """
         # Sanity check
@@ -133,7 +133,7 @@ class Graph:
 
         # Get a list of layers (each layer as a set of nodes)
         layers = self.set_up_layers(inputs, outputs, connections)
-        
+
         # If direct network, then return
         if not layers:
             print("WARNING: No layers in the network!")
@@ -144,7 +144,7 @@ class Graph:
         for i, layer in enumerate(layers, start = 1):
 
             # For each node in the current layer
-            for node in layer:         
+            for node in layer:
                 # Add bias (==1) to the sum of previous activations
                 node_activation = 1 + sum([
                     prev_a * c.get_weight()
@@ -162,7 +162,4 @@ class Graph:
                    layer_activations.append((node, relu(node_activation)))
 
         # Return last layer's (output layer) activations
-        return layer_activations[-1]    
-
-
-
+        return layer_activations[-1]

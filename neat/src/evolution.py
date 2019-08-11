@@ -4,18 +4,9 @@
 """
 
 """
-The following class will contain the population of genomes,
-evaluation of each through fitness function (openAI gym in this case),
-
-SELECTION: Reproduction happens in a separate class
-MUTATION:  Each genome will mutate on its own. Function is called in Selection
-
-* Population
-* Variables:
-    - genomes
-    - generation
-    - environment
-    - constants c1/c2 for speciation?
+The following class will contain the population of genomes;
+evaluation of each through fitness function (openAI gym in this case);
+selection, mutation and crossover operations.
 """
 
 import gym
@@ -25,7 +16,6 @@ import copy
 
 from genome import Genome
 from reproduction import crossover
-
 
 class Evolution:
     """ Driver (core) class which performs the "evolution".
@@ -41,7 +31,6 @@ class Evolution:
                 N - size of the population (number of individuals)
                 K - keeps k best genomes every generation
         """
-
         # Sanity checks
         assert N > K, "Invalid N, K dimensions configuration!"
 
@@ -50,7 +39,7 @@ class Evolution:
         self.env_dims = env_dims
 
         # Softcoded or dynamically computed
-        self.genomes = self.__initialize_population(N)
+        self.genomes = self.initialize_population(N)
         self.best_genome = None
         self.N = N
         self.best_K = K
@@ -67,7 +56,7 @@ class Evolution:
 
     ############ - Private methods - ############
 
-    def __fitness_normalizer(self, genomes_scored):
+    def fitness_normalizer(self, genomes_scored):
         """ Normalizes the fitness of all genomes for speciation. """
         assert len(genomes_scored) > 0, "Genomes list cannot empty!"
         
@@ -107,8 +96,7 @@ class Evolution:
             
         return genomes_normed
 
-
-    def __initialize_population(self, N):
+    def initialize_population(self, N):
         """ Initializes a population of genomes of size N. """
         assert N > 0, "N cannot be less than 1!"
         
@@ -141,13 +129,11 @@ class Evolution:
             genome_c += 1
         return
     
-
     def reset(self):
         """ Resets the genomes score for better performance metric. """
         for genome in self.genomes:
             genome.reset_score()
         return
-
 
     def selection(self):
         """ Selection of the best individuals as well as crossover. """
@@ -157,7 +143,7 @@ class Evolution:
         genomes_scores = [(g, g.get_score()) for g in self.genomes]
 
         # Normalize the score of each (fitness sharing)
-        genomes_scores_norm = self.__fitness_normalizer(genomes_scores)
+        genomes_scores_norm = self.fitness_normalizer(genomes_scores)
 
         # Sort and take the best half
         genomes_scores_norm.sort(key = operator.itemgetter(1), reverse=True)
@@ -191,7 +177,6 @@ class Evolution:
             new_genomes = new_genomes[0 : self.N]
     
         self.genomes = new_genomes
-
     
     def mutation(self):
         """ Mutation operation for population variation and diversity. """
@@ -203,8 +188,8 @@ class Evolution:
 
         return
     
-
     ############ - Public methods - ############
+
     def get_statistics(self):
         # X is generation number
         X = [i + 1 for i in range( len(self.stats_aver_genome) )]
@@ -261,6 +246,3 @@ class Evolution:
             
             # Reset the score every generation for better performance metric
             self.reset()    
-
-
-   
