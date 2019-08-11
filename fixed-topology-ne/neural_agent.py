@@ -112,7 +112,3 @@ class NeuralAgent:
         # Get the output 
         return 1 if a3 >= 0 else 0
 
-
-nn = NeuralAgent()
-action = nn.action([1,2,3,4])
-print(action)
