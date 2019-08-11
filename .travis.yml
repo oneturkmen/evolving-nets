@@ -6,5 +6,6 @@ install:
     - pip install -r neat/requirements.txt
 
 script:
+    - echo "testing"
     - cd neat/tests
     - python3 -m unittest discover
