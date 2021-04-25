@@ -61,8 +61,8 @@ Contributions welcome! Just open a PR and @tag me!
 
 - Make training distributed for getting results faster.
 - Easy-to-use pipeline for hyper-parameters (similar to [grid search](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html)).
-- [ ] Unit testing module and more unit tests. It would be better to add extra testing layers, i.e. integration, smoke, regression, etc. whatever is necessary for better testability and reliability.
-- [ ] Docker and package manager to automate the installation and change of packages/modules/etc.
+- Unit testing module and more unit tests. It would be better to add extra testing layers, i.e. integration, smoke, regression, etc. whatever is necessary for better testability and reliability.
+- Docker and package manager to automate the installation and change of packages/modules/etc.
 
 
 ### References
